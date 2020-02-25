@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
 
@@ -18,12 +17,13 @@ export default function App() {
   useEffect(() => {
     fetchShow()
       .then((res) => {
+
         setShow(res.data);
         setSeasons(formatSeasons(res.data._embedded.episodes));
       })
-
-   
-    fetchShow();
+      .catch((err) => {
+        console.log(err)
+      })
   }, []);
 
   const handleSelect = e => {
@@ -40,6 +40,7 @@ export default function App() {
       <h1>{show.name}</h1>
       {parse(show.summary)}
       <Dropdown
+        data-testid='dropdown'
         options={Object.keys(seasons)}
         onChange={handleSelect}
         value={selectedSeason || "Select a season"}
